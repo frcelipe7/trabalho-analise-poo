@@ -1,10 +1,59 @@
 package br.uepa.jdbc;
 
+import java.io.IOException;
+import java.net.http.HttpResponse;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import java.util.concurrent.CompletableFuture;
+
 public class Main {
-    public static boolean createTables(String url) {
+    public static final String RESET = "\u001B[0m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+
+    public static void loading(CompletableFuture<?> future) throws IOException, InterruptedException {
+        while(!future.isDone()) {
+            String message = "Conectando com o banco de dados  ";
+            System.out.print("\r" + message + "-");
+            Thread.sleep(200);
+            System.out.print("\r" + message + "\\");
+            Thread.sleep(200);
+            System.out.print("\r" + message + "|");
+            Thread.sleep(200);
+            System.out.print("\r" + message + "/");
+            Thread.sleep(200);
+            System.out.print("\r" + message + "-");
+            Thread.sleep(200);
+            System.out.print("\r" + message + "r/");
+            Thread.sleep(200);
+        }
+    }
+
+    public static Connection connect(String url) throws IOException, InterruptedException {
+        CompletableFuture<Connection> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                Connection conn = DriverManager.getConnection(url);
+                System.out.println("\rConexão com o banco de dados concluída!");
+                return conn;
+            } catch (SQLException e) {
+                System.out.println(RED + "Erro na conexão: " + e.getMessage() + RESET);
+                return null;
+            }
+        });
+
+        loading(future);
+
+        try {
+            return future.get();
+        } catch (Exception e) {
+            System.out.println(RED + "Erro ao aguardar conexão: " + e.getMessage() + RESET);
+            return null;
+        }
+    }
+
+    public static boolean createTables(String url) throws IOException, InterruptedException {
         String groupTable = "CREATE TABLE IF NOT EXISTS groups("
                 + " id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + " name TEXT NOT NULL,"
@@ -38,19 +87,24 @@ public class Main {
                 + " FOREIGN KEY (category_id) REFERENCES categories(id)"
                 + ");";
 
-        try (var conn = DriverManager.getConnection(url);
-             var sttmt = conn.createStatement()) {
+        try {
+            Connection conn = connect(url);
+
+
+            if (conn == null) return false;
+
+            var sttmt = conn.createStatement();
 
             sttmt.execute("PRAGMA foreign_keys = ON");
 
             sttmt.execute(groupTable);
-            System.out.println("Tabela \"Group\" criada com sucesso!");
+            System.out.println("\rCriando tabela: \"Group\"..................." + GREEN + "OK" + RESET);
             sttmt.execute(userTable);
-            System.out.println("Tabela \"User\" criada com sucesso!");
+            System.out.println("Criando tabela: \"User\"...................." + GREEN + "OK" + RESET);
             sttmt.execute(categoryTable);
-            System.out.println("Tabela \"Category\" criada com sucesso!");
+            System.out.println("Criando tabela: \"Category\"................" + GREEN + "OK" + RESET);
             sttmt.execute(productTable);
-            System.out.println("Tabela \"Product\" criada com sucesso!");
+            System.out.println("Criando tabela: \"Product\"................." + GREEN + "OK" + RESET);
 
             return true;
         } catch (SQLException e) {
@@ -59,21 +113,9 @@ public class Main {
         }
     }
 
-    public static boolean connect(String url) {
-        try (var conn = DriverManager.getConnection(url)) {
-            System.out.println("Conexão com o banco de dados concluída!");
-            return true;
-        } catch (SQLException e) {
-            System.out.println("Erro na conexão: " + e.getMessage());
-            return false;
-        }
-    }
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         var url = "jdbc:sqlite:src/sqlite.db";
 
-        if (connect(url)) {
-            createTables(url);
-        }
+        createTables(url);
     }
 }
