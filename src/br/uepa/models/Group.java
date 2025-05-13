@@ -4,13 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Group {
-    private final int id;
+    private int id;
     private String name;
     private ArrayList<String> permissions;
     private LocalDateTime joinedAt;
 
-    public Group(int id, String name, ArrayList permissions) {
-        this.id = id;
+    public Group(String name, ArrayList permissions) {
         this.name = name;
         this.permissions = permissions;
     }

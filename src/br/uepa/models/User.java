@@ -4,13 +4,12 @@ import com.google.gson.Gson;
 import java.time.LocalDate;
 
 public class User {
-    private final int id;
+    private int id;
     private String name;
     private LocalDate birthday;
     private int group_id;
 
-    public User(int id, String name, LocalDate birthday) {
-        this.id = id;
+    public User(String name, LocalDate birthday) {
         this.name = name;
         this.birthday = birthday;
     }
