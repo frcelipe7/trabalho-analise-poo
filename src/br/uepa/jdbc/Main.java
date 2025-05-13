@@ -53,7 +53,7 @@ public class Main {
         }
     }
 
-    public static boolean createTables(String url) throws IOException, InterruptedException {
+    public static boolean createTables(String url, Connection conn) throws IOException, InterruptedException {
         String groupTable = "CREATE TABLE IF NOT EXISTS groups("
                 + " id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + " name TEXT NOT NULL,"
@@ -88,9 +88,6 @@ public class Main {
                 + ");";
 
         try {
-            Connection conn = connect(url);
-
-
             if (conn == null) return false;
 
             var sttmt = conn.createStatement();
@@ -116,6 +113,7 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         var url = "jdbc:sqlite:src/sqlite.db";
 
-        createTables(url);
+        Connection conn = connect(url);
+        createTables(url, conn);
     }
 }

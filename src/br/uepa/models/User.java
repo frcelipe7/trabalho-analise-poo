@@ -1,17 +1,45 @@
 package br.uepa.models;
 
-import com.google.gson.Gson;
-import java.time.LocalDate;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class User {
+public class User extends DBConection {
     private int id;
     private String name;
-    private LocalDate birthday;
+    private String birthday;
     private int group_id;
 
-    public User(String name, LocalDate birthday) {
+    public User(String name, String birthday) {
         this.name = name;
         this.birthday = birthday;
+    }
+
+    @Override
+    public boolean save(Connection conn) {
+        String sql = "INSERT INTO users (name, birthday, group_id) VALUES (?, ?, ?)";
+
+        try {
+            var sttmt = conn.prepareStatement(sql);
+            sttmt.setQueryTimeout(30);
+            sttmt.setString(1, this.name);
+            sttmt.setString(2, this.birthday);
+
+            if (this.group_id == 0) {
+                sttmt.setNull(3, java.sql.Types.INTEGER);
+            } else {
+                sttmt.setInt(3, this.group_id);
+            }
+
+            sttmt.executeUpdate();
+
+            System.out.println("Usuário salvo com sucesso!");
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar usuário: " + e.getMessage());
+            return false;
+        }
     }
 
     public String getName() {
@@ -22,11 +50,11 @@ public class User {
         this.name = name;
     }
 
-    public LocalDate getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDate birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -36,11 +64,5 @@ public class User {
 
     public void setGroup_id(int group_id) {
         this.group_id = group_id;
-    }
-
-    public String serialize() {
-        Gson gson = new Gson();
-        String json = gson.toJson(this);
-        return json;
     }
 }
