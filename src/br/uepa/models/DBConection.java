@@ -7,7 +7,7 @@ import java.sql.Connection;
 public abstract class DBConection {
     public abstract boolean save(Connection conn);
 
-    public abstract String get();
+    public abstract String get(Connection conn);
 
     public String serialize() {
         Gson gson = new Gson();

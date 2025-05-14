@@ -13,9 +13,8 @@ public class Main {
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
 
-    public static void loading(CompletableFuture<?> future) throws IOException, InterruptedException {
+    public static void loading(CompletableFuture<?> future, String message) throws IOException, InterruptedException {
         while(!future.isDone()) {
-            String message = "Conectando com o banco de dados  ";
             System.out.print("\r" + message + "-");
             Thread.sleep(200);
             System.out.print("\r" + message + "\\");
@@ -43,7 +42,7 @@ public class Main {
             }
         });
 
-        loading(future);
+        loading(future, "Conectando com o banco de dados  ");
 
         try {
             return future.get();
