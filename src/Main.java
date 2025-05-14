@@ -26,6 +26,11 @@ public class Main {
         Group group = new Group("Tech lead", permissions, 2);
         User user = new User("gabryel", "12/05/2026");
 
+        System.out.println("\nExibindo Group.serialize():");
+        System.out.println(group.serialize());
+
+        System.out.println("\nExibindo User.serialize():");
+        System.out.println(user.serialize());
 
         //System.out.println("\nSalvando grupo:");
         //group.save(conn);           // precisa salvar o grupo antes de salvar o usuário no db
@@ -42,5 +47,63 @@ public class Main {
         System.out.println("\nExibindo usuários:");
         user.get(conn);
 
+    }
+
+    public void insertData(Connection conn) {
+        // criando permissoes do admin
+        // Admin("can_create_user", "can_read_user", "can_update_user", "can_delete_user", "can_read_logs");
+        ArrayList<String> adminPermissions = new ArrayList<String>();
+        adminPermissions.add("can_create_user");
+        adminPermissions.add("can_read_user");
+        adminPermissions.add("can_update_user");
+        adminPermissions.add("can_delete_user");
+        adminPermissions.add("can_read_logs");
+
+        // criando um grupo e um usuário
+        Group adminGroup = new Group("Admin", adminPermissions, 4);
+        User user = new User("JP", "12/05/2026");
+
+        System.out.println("\nExibindo Group.serialize():");
+        System.out.println(adminGroup.serialize());
+
+        System.out.println("\nExibindo User.serialize():");
+        System.out.println(user.serialize());
+
+        //System.out.println("\nSalvando grupo:");
+        adminGroup.save(conn);           // precisa salvar o grupo antes de salvar o usuário no db
+
+        // adicionando o usuário no grupo
+        adminGroup.addUser(user);
+
+        //System.out.println("\nSalvando usuário:");
+        user.save(conn);
+
+
+        /// ////////////////////////////////////////////////////////////////////
+        // criando permissoes do admin
+        // SalesAnalyst("can_read_notifications", "can_download_reports", "can_read_analisys");
+        ArrayList<String> salesAnalystPermissions = new ArrayList<String>();
+        salesAnalystPermissions.add("can_read_notifications");
+        salesAnalystPermissions.add("can_download_reports");
+        salesAnalystPermissions.add("can_read_analisys");
+
+        // criando um grupo e um usuário
+        Group salesAnalystGroup = new Group("SalesAnalyst", salesAnalystPermissions, 5);
+        User salesAnalystUser = new User("", "12/05/2026");
+
+        System.out.println("\nExibindo Group.serialize():");
+        System.out.println(salesAnalystGroup.serialize());
+
+        System.out.println("\nExibindo User.serialize():");
+        System.out.println(salesAnalystUser.serialize());
+
+        //System.out.println("\nSalvando grupo:");
+        salesAnalystGroup.save(conn);           // precisa salvar o grupo antes de salvar o usuário no db
+
+        // adicionando o usuário no grupo
+        salesAnalystGroup.addUser(salesAnalystUser);
+
+        //System.out.println("\nSalvando usuário:");
+        salesAnalystUser.save(conn);
     }
 }
