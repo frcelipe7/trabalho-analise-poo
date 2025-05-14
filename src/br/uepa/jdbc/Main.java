@@ -25,7 +25,7 @@ public class Main {
             Thread.sleep(200);
             System.out.print("\r" + message + "-");
             Thread.sleep(200);
-            System.out.print("\r" + message + "r/");
+            System.out.print("\r" + message + "/");
             Thread.sleep(200);
         }
     }
