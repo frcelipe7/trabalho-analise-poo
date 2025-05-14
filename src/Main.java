@@ -1,7 +1,7 @@
-import br.uepa.models.User;
-import br.uepa.models.Group;
+import br.uepa.models.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class Main {
         createTables(url, conn);                // criando tabelas (se não existir)
 
         // criando permissoes do admin
-        ArrayList<String> permissions = new ArrayList<String>();
+        ArrayList<String> permissions = new ArrayList<>();
         permissions.add("gerenciar o grupo de desenvolvimento");
         permissions.add("negar o pull request");
         permissions.add("fazer deploy na sexta feira");
@@ -47,12 +47,21 @@ public class Main {
         System.out.println("\nExibindo usuários:");
         user.get(conn);
 
+
+        // insertData(conn);
+    }
+
+    public void buy() {
+        Product product1 = new Product(1, "SSD 512gb", new BigDecimal("250"));
+        Product product2
+        SaleItem saleItem = new SaleItem(1, 1, 1, 5, new BigDecimal("250"));
+        Sale sale = new Sale();
     }
 
     public void insertData(Connection conn) {
         // criando permissoes do admin
         // Admin("can_create_user", "can_read_user", "can_update_user", "can_delete_user", "can_read_logs");
-        ArrayList<String> adminPermissions = new ArrayList<String>();
+        ArrayList<String> adminPermissions = new ArrayList<>();
         adminPermissions.add("can_create_user");
         adminPermissions.add("can_read_user");
         adminPermissions.add("can_update_user");
@@ -80,9 +89,9 @@ public class Main {
 
 
         /// ////////////////////////////////////////////////////////////////////
-        // criando permissoes do admin
+        // criando permissoes do salesAnalyst
         // SalesAnalyst("can_read_notifications", "can_download_reports", "can_read_analisys");
-        ArrayList<String> salesAnalystPermissions = new ArrayList<String>();
+        ArrayList<String> salesAnalystPermissions = new ArrayList<>();
         salesAnalystPermissions.add("can_read_notifications");
         salesAnalystPermissions.add("can_download_reports");
         salesAnalystPermissions.add("can_read_analisys");
