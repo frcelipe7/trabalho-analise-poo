@@ -1,4 +1,5 @@
 import br.uepa.models.*;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -49,13 +50,38 @@ public class Main {
 
 
         // insertData(conn);
+        buy();
     }
 
-    public void buy() {
+    public static void buy() {
+        System.out.println("\nRealizando venda...");
         Product product1 = new Product(1, "SSD 512gb", new BigDecimal("250"));
-        Product product2
-        SaleItem saleItem = new SaleItem(1, 1, 1, 5, new BigDecimal("250"));
-        Sale sale = new Sale();
+        Product product2 = new Product(2, "Teclado Razer", new BigDecimal("300"));
+
+        SaleItem saleItem1 = new SaleItem(1, 1, 1, 5, product1.getPrice());
+        SaleItem saleItem2 = new SaleItem(2, 1, 2, 10, product2.getPrice());
+
+        ArrayList<SaleItem> itensList = new ArrayList<>();
+        itensList.add(saleItem1);
+        itensList.add(saleItem2);
+
+        Sale sale1 = new Sale(1, itensList, 1);
+
+        System.out.println("Venda realizada com sucesso!");
+
+        System.out.println("\nExibindo produtos:");
+
+
+        System.out.println(String.format("Sale: " + sale1));
+
+        Gson gson2 = new Gson();
+        String jsonItem1 = gson2.toJson(saleItem1);
+        System.out.println(String.format("Item 1: " + jsonItem1));
+
+        Gson gson3 = new Gson();
+        String jsonItem2 = gson3.toJson(saleItem2);
+        System.out.println(String.format("Item 2: " + jsonItem2));
+
     }
 
     public void insertData(Connection conn) {
