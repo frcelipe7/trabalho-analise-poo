@@ -49,7 +49,7 @@ public class Group extends DBConection{
             var rs = stmt.executeQuery(sql);
 
             // Cabeçalho com quebra de linha
-            System.out.printf("%-5s%-25s%-20s%n",
+            System.out.printf("%-5s%-35s%-20s%n",
                     "ID",
                     "Nome",
                     "Permissões"
@@ -57,7 +57,7 @@ public class Group extends DBConection{
 
             // Dados com quebra de linha
             while (rs.next()) {
-                System.out.printf("%-5d%-25s%-20s%n",
+                System.out.printf("%-5d%-35s%-20s%n",
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("permissions")
